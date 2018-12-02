@@ -35,15 +35,15 @@ def newSample(X,Y,k):
     tmp = Y2.shape[0]
     Y2 = Y2[:tmp-1,:]
     return X,Y,Y2
-    
-    
+
+
     #propagate Y2 by Y1; SAME DIMENSIONS!
 def Propagate(X1, Y1, X2, Y2, kgram):
     X1, Y1, Y1new = newSample(X1,Y1,kgram)
     X2, Y2, Y2new = newSample(X2,Y2,kgram)
     w, w0 = RidgeRegression(Y1new,Y2,C=1e-9)
     print(w,w0)
-    
+
     n = X1.shape[0]
     Yhat = np.zeros(n)
     for i in range(n):
@@ -51,7 +51,8 @@ def Propagate(X1, Y1, X2, Y2, kgram):
     print("SSE: ", SSE(Y1new,Y2,w,w0))
     return X1, Y1, X2, Y2, Yhat
 
-    
+
+
 
 #-----------------------------------------------------------------
                     # propagate RowC by RowA
