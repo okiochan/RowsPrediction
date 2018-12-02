@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import dataRidge
+import normalize
 
 def RidgeRegression(X,y,C):
     l = X.shape[0]
@@ -13,7 +14,6 @@ def RidgeRegression(X,y,C):
     # learn linear MNK
     res = np.linalg.inv(X.T.dot(X) + np.eye(n+1) * C).dot(X.T.dot(y))
     return res[1:(n+1)], res[0]
-
 
 def SSE(X,y,a,b):
     l = X.shape[0]
@@ -42,6 +42,7 @@ def Propagate(X1, Y1, X2, Y2, kgram):
     X1, Y1, Y1new = newSample(X1,Y1,kgram)
     X2, Y2, Y2new = newSample(X2,Y2,kgram)
     w, w0 = RidgeRegression(Y1new,Y2,C=1e-9)
+    print(w,w0)
     
     n = X1.shape[0]
     Yhat = np.zeros(n)
@@ -55,11 +56,15 @@ def Propagate(X1, Y1, X2, Y2, kgram):
 #-----------------------------------------------------------------
                     # propagate RowC by RowA
 
-X1, Y1 = dataRidge.DataBuilder().Build("RowA")
+X1, Y1 = dataRidge.DataBuilder().Build("RowB")
 X2, Y2 = dataRidge.DataBuilder().Build("RowC")
+X1 = X1.reshape(-1,1)
+X2 = X2.reshape(-1,1)
+X1, Y1 = normalize.Normalize(X1, Y1)
+X2, Y2 = normalize.Normalize(X2, Y2)
 
-plt.plot(X1,Y1, c = "green")
-#plt.plot(X2,Y2, c = "blue")
+plt.plot(X1.ravel(),Y1, c = "green")
+plt.plot(X2.ravel(),Y2, c = "blue")
 plt.show()
 
 X1 = np.concatenate((X1[0:11],X1[20:]))
