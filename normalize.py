@@ -32,6 +32,8 @@ def FillMissingValues(x1,y1,x2,y2,tol=1e-10):
     while i < x1.size and j < x2.size:
         if abs(x1[i]-x2[j]) <= d*tol:
             newx.append((x1[i]+x2[j])/2)
+            newy1.append(y1[i])
+            newy2.append(y2[j])
             i+=1
             j+=1
         elif x1[i] < x2[j]:
