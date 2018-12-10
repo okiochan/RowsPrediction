@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+import matplotlib.patches as mpatches
 import numpy as np
 
 def PlotTimeSeries(y,offset,**kwargs):
@@ -18,3 +19,9 @@ def DensityPlot(data,**kwargs):
     y = density(xs)
     y /= np.abs(y).max()
     plt.plot(xs,y,**kwargs)
+
+def AddLegends(colors,names):
+    patches=[]
+    for it in zip(names,colors):
+        patches.append(mpatches.Patch(color=it[1], label=it[0]))
+    plt.legend(handles=patches)
