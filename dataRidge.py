@@ -86,6 +86,9 @@ class RowC:
         Y = np.array(Y,dtype = float)
         return X,Y
 
+def GetQuadraticTrend(a,b,c,x,noise=1):
+    return a*x**2+b*x+c + np.random.randn(x.size)*noise
+
 class DataBuilder:
     def Build(self, name):
         if name == "fake":
@@ -112,6 +115,11 @@ class DataBuilder:
         elif name == "RowC":
             x, y = RowC().GenerateSample()
             return x, y
-
+        elif name == "GetQuadraticTrendUp":
+            x = np.linspace(0,2,200)
+            return x, GetQuadraticTrend(1,3,6,x)
+        elif name == "GetQuadraticTrendDown":
+            x = np.linspace(0,2,200)
+            return x, GetQuadraticTrend(-5,0,-3,x)
         else:
             assert("Unknown data")

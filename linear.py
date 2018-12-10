@@ -61,13 +61,13 @@ def MakePredictions(last,need,w,err=0):
 
 
 
-X1, Y1 = dataRidge.DataBuilder().Build("helloSin")
-X2, Y2 = dataRidge.DataBuilder().Build("helloCos")
+X1, Y1 = dataRidge.DataBuilder().Build("GetQuadraticTrendDown")
+X2, Y2 = dataRidge.DataBuilder().Build("GetQuadraticTrendUp")
 # X1, Y1 = dataRidge.DataBuilder().Build("RowA")
 # X2, Y2 = dataRidge.DataBuilder().Build("RowC")
 X,Y1,Y2 = normalize.FillMissingValues(X1,Y1,X2,Y2)
 
-k = 5
+k = 7
 X = normalize.NormalizeVec(X)
 Y1 = normalize.NormalizeVec(Y1)
 Y2 = normalize.NormalizeVec(Y2)
@@ -77,7 +77,7 @@ x = dataRidge.AddOnes(x)
 w = LeastSquares.Solve(x,y)
 errs = ConfidenceInterval.GetErrorDistribution(x,y)
 
-needPreds = 10
+needPreds = 50
 yPred = []
 for i in range(y.size):
     yPred.append(np.dot(w,x[i,:]))
@@ -97,8 +97,10 @@ errs2 = ConfidenceInterval.GetErrorDistribution(A,B)
 
 plt.subplot(2, 1, 1)
 wDist = ConfidenceInterval.GetDistribution(x,y)
-PlottingHelper.DensityPlot(errs)
-PlottingHelper.DensityPlot(errs2)
+PlottingHelper.AddLegends(['royalblue','orange','green'],['First Series Density',
+    'Second Series Error Density'])
+PlottingHelper.DensityPlot(errs,c='royalblue')
+PlottingHelper.DensityPlot(errs2,c='orange')
 # plt.show()
 plt.subplot(2, 1, 2)
 for i in range(wDist.shape[1]):
@@ -106,17 +108,28 @@ for i in range(wDist.shape[1]):
 plt.show()
 
 plt.subplot(2, 1, 1)
-plt.plot(np.arange(y.size),y,linewidth=7.0)
+PlottingHelper.AddLegends(['r','g','orange','violet','royalblue'],[
+    'Cummulative Max PI',
+    'Cummulative 80% PI',
+    '80% Percentile PI',
+    'Mean',
+    'Points'])
+plt.scatter(np.arange(y.size),y,linewidth=2.0,c='royalblue')
 plt.plot(np.arange(len(yPredMean)),yPredUp,c='r')
 plt.plot(np.arange(len(yPredMean)),yPredLow,c='r')
 plt.plot(np.arange(len(yPredMean)),yPred05,c='g')
 plt.plot(np.arange(len(yPredMean)),yPred95,c='g')
 plt.plot(np.arange(len(yPredMean)),yPredMean+np.percentile(errs,10),c='orange')
 plt.plot(np.arange(len(yPredMean)),yPredMean+np.percentile(errs,90),c='orange')
+plt.plot(np.arange(len(yPredMean)),yPredMean,c='violet')
 plt.ylim(ymin=-1.2,ymax=1.2)
 
 plt.subplot(2, 1, 2)
-PlottingHelper.PlotTimeSeries(Y2,0,c='royalblue')
+PlottingHelper.AddLegends(['royalblue','orange','green'],[
+    'Points',
+    'Mean',
+    '80% Percentile PI'])
+plt.scatter(np.arange(Y2.size),Y2,c='royalblue')
 PlottingHelper.PlotTimeSeries(B2,2*k-1,c='orange')
 PlottingHelper.PlotTimeSeries(B2 + np.percentile(errs2,10),2*k-1,c='green')
 PlottingHelper.PlotTimeSeries(B2 + np.percentile(errs2,90),2*k-1,c='green')
