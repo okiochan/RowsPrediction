@@ -61,13 +61,15 @@ def MakePredictions(last,need,w,err=0):
 
 
 
-X1, Y1 = dataRidge.DataBuilder().Build("GetQuadraticTrendDown")
-X2, Y2 = dataRidge.DataBuilder().Build("GetQuadraticTrendUp")
+# X1, Y1 = dataRidge.DataBuilder().Build("GetQuadraticTrendDown")
+# X2, Y2 = dataRidge.DataBuilder().Build("GetQuadraticTrendUp")
+X1, Y1 = dataRidge.DataBuilder().Build("helloSin")
+X2, Y2 = dataRidge.DataBuilder().Build("helloCos")
 # X1, Y1 = dataRidge.DataBuilder().Build("RowA")
 # X2, Y2 = dataRidge.DataBuilder().Build("RowC")
 X,Y1,Y2 = normalize.FillMissingValues(X1,Y1,X2,Y2)
 
-k = 7
+k = 2
 X = normalize.NormalizeVec(X)
 Y1 = normalize.NormalizeVec(Y1)
 Y2 = normalize.NormalizeVec(Y2)
@@ -77,7 +79,7 @@ x = dataRidge.AddOnes(x)
 w = LeastSquares.Solve(x,y)
 errs = ConfidenceInterval.GetErrorDistribution(x,y)
 
-needPreds = 50
+needPreds = 200
 yPred = []
 for i in range(y.size):
     yPred.append(np.dot(w,x[i,:]))

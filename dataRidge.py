@@ -86,7 +86,7 @@ class RowC:
         Y = np.array(Y,dtype = float)
         return X,Y
 
-def GetQuadraticTrend(a,b,c,x,noise=1):
+def GetQuadraticTrend(a,b,c,x,noise=0.1):
     return a*x**2+b*x+c + np.random.randn(x.size)*noise
 
 class DataBuilder:
