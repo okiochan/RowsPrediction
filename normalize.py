@@ -10,6 +10,13 @@ def Normalize(X):
         X[:,j]=NormalizeVec(X[:,j])
     return X
 
+def Normalizer(x):
+    min = x.min()
+    max = x.max()
+    def res(x):
+        return 2*(x-min)/(max-min)-1
+    return res
+
 def Lerp(t,y1,y2):
     return (1-t)*y1 + t*y2
 
