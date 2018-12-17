@@ -65,7 +65,7 @@ def MakePredictions(last,need,w,err=0):
 
 
 #ideal: k=2, Sin, Cos
-k = 3
+k = 4
 needPreds = 50
 # X1, Y1 = dataRidge.DataBuilder().Build("GetQuadraticTrendDown")
 # X2, Y2 = dataRidge.DataBuilder().Build("GetQuadraticTrendUp")
@@ -80,15 +80,14 @@ needPreds = 50
 # X1, Y1 = dataRidge.DataBuilder().Build("RowB")
 # X2, Y2 = dataRidge.DataBuilder().Build("RowC")
 
-X1, Y1 = dataRidge.DataBuilder().Build("SalesWaltmartApred")
+# X1, Y1 = dataRidge.DataBuilder().Build("SalesWaltmartApred")
 X1, Y1 = dataRidge.DataBuilder().Build("SalesWaltmartA")
 X2, Y2 = dataRidge.DataBuilder().Build("SalesWaltmartB")
 
-plt.plot(X1,Y1, c="blue")
-plt.plot(X2,Y2, c="orange")
-plt.show()
-
-quit()
+# plt.plot(X1,Y1, c="blue")
+# plt.plot(X2,Y2, c="orange")
+# plt.show()
+# quit()
 
 
 #interpolation
@@ -118,7 +117,7 @@ errs = ConfidenceInterval.GetErrorDistribution(x,y)
 # yPred95 = yPred[:-1] + MakePredictions(x[-1,:],needPreds,w,np.percentile(errs,90))
 # yPredMean = yPred[:-1] + MakePredictions(x[-1,:],needPreds,w)
 # _, yPredMean = dataRidge.DataBuilder().Build("SalesApred")
-_, yPredMean = dataRidge.DataBuilder().Build("RowBpred")
+_, yPredMean = dataRidge.DataBuilder().Build("SalesWaltmartApred")
 yPredMean = nrmY1(yPredMean)
 # print(yPredMean)
 # quit()
