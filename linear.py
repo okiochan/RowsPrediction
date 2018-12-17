@@ -14,6 +14,7 @@ def SSE(X,y,a,b):
         loss += (a.dot(X[i,...])+b-y[i])**2
     return loss * 0.5 / l
 
+#build that matrix
 def newSample(X,Y,k):
     n = Y.shape[0]
     Y2 = np.zeros((n-k+1, k))
@@ -27,11 +28,13 @@ def newSample(X,Y,k):
     tmp = Y2.shape[0]
     Y2 = Y2[:tmp-1,:]
     return X,Y,Y2
-
-    #propagate Y2 by Y1; SAME DIMENSIONS!
+    
+#propagate Y2 by Y1; SAME DIMENSIONS!
 def Propagate(X1, Y1, X2, Y2, kgram):
+    #make the matrix below
     X1, Y1, Y1new = newSample(X1,Y1,kgram)
     X2, Y2, Y2new = newSample(X2,Y2,kgram)
+    #get w,w0 with linear regression
     w, w0 = RidgeRegression(Y1new,Y2,C=1e-9)
     print(w,w0)
 
@@ -41,6 +44,7 @@ def Propagate(X1, Y1, X2, Y2, kgram):
         Yhat[i] = w.dot(Y1new[i,...])+w0
     print("SSE: ", SSE(Y1new,Y2,w,w0))
     return X1, Y1, X2, Y2, Yhat
+
 
 def MakePredictions(last,need,w,err=0):
     res = []
@@ -60,21 +64,38 @@ def MakePredictions(last,need,w,err=0):
     return res
 
 
-
-k = 2
-needPreds = 200
+#ideal: k=2, Sin, Cos
+k = 3
+needPreds = 50
 # X1, Y1 = dataRidge.DataBuilder().Build("GetQuadraticTrendDown")
 # X2, Y2 = dataRidge.DataBuilder().Build("GetQuadraticTrendUp")
-X1, Y1 = dataRidge.DataBuilder().Build("helloSin")
-X2, Y2 = dataRidge.DataBuilder().Build("helloCos")
-# X1, Y1 = dataRidge.DataBuilder().Build("RowA")
-# X2, Y2 = dataRidge.DataBuilder().Build("RowC")
+
+# X1, Y1 = dataRidge.DataBuilder().Build("helloSin")
+# X2, Y2 = dataRidge.DataBuilder().Build("helloCos")
+
+# X1, Y1 = dataRidge.DataBuilder().Build("SalesApred")
+# X2, Y2 = dataRidge.DataBuilder().Build("SalesB")
+
+#X1, Y1 = dataRidge.DataBuilder().Build("RowApred")
+#X1, Y1 = dataRidge.DataBuilder().Build("RowBpred")
+#X2, Y2 = dataRidge.DataBuilder().Build("RowC")
+
+plt.plot(X1,Y1, c="blue")
+#plt.plot(X2,Y2, c="orange")
+plt.show()
+quit()
+
+
+#interpolation
 X,Y1,Y2 = normalize.FillMissingValues(X1,Y1,X2,Y2)
 
+#[-1,1]
 X = normalize.NormalizeVec(X)
 Y1 = normalize.NormalizeVec(Y1)
 Y2 = normalize.NormalizeVec(Y2)
 
+#Linear prediction
+#create table for learning
 x,y = TimeSeriesHelper.PrepareLearningTable(Y1,k)
 x = dataRidge.AddOnes(x)
 w = LeastSquares.Solve(x,y)
@@ -99,7 +120,7 @@ errs2 = ConfidenceInterval.GetErrorDistribution(A,B)
 
 plt.subplot(2, 1, 1)
 wDist = ConfidenceInterval.GetDistribution(x,y)
-PlottingHelper.AddLegends(['royalblue','orange','green'],['First Series Density',
+PlottingHelper.AddLegends(['royalblue','orange','green'],['First Series Error Density',
     'Second Series Error Density'])
 PlottingHelper.DensityPlot(errs,c='royalblue')
 PlottingHelper.DensityPlot(errs2,c='orange')

@@ -1,6 +1,7 @@
 import numpy as np
 import LeastSquares
 
+#raspred coeffs
 def GetDistribution(X,Y,samples=1000):
     l = X.shape[0]
     allW = []
@@ -11,6 +12,7 @@ def GetDistribution(X,Y,samples=1000):
         allW.append(LeastSquares.Solve(Xsel,Ysel))
     return np.array(allW,dtype=float)
 
+#raspred errors
 def GetErrorDistribution(X,Y):
     w = LeastSquares.Solve(X,Y)
     l = X.shape[0]
