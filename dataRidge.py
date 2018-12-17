@@ -140,7 +140,7 @@ class SalesA:
         for i in range(len(df.values)): 
             if (df.values[i][0] == 1): 
                 Y.append(df.values[i][3])
-        print(Y)
+        # print(Y)
         X = np.arange(0,len(Y))
         return X,Y
         
@@ -156,7 +156,7 @@ class SalesApred:
         
         Y = np.concatenate( (Y,Y1), axis=0)
         
-        print(Y)
+        # print(Y)
         X = np.arange(0,len(Y))
         return X,Y
     

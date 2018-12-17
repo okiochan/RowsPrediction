@@ -73,26 +73,29 @@ needPreds = 50
 # X1, Y1 = dataRidge.DataBuilder().Build("helloSin")
 # X2, Y2 = dataRidge.DataBuilder().Build("helloCos")
 
-# X1, Y1 = dataRidge.DataBuilder().Build("SalesApred")
-# X2, Y2 = dataRidge.DataBuilder().Build("SalesB")
+X1, Y1 = dataRidge.DataBuilder().Build("SalesA")
+X2, Y2 = dataRidge.DataBuilder().Build("SalesB")
 
-#X1, Y1 = dataRidge.DataBuilder().Build("RowApred")
-#X1, Y1 = dataRidge.DataBuilder().Build("RowBpred")
-#X2, Y2 = dataRidge.DataBuilder().Build("RowC")
+# X1, Y1 = dataRidge.DataBuilder().Build("RowApred")
+# X1, Y1 = dataRidge.DataBuilder().Build("RowBpred")
+# X2, Y2 = dataRidge.DataBuilder().Build("RowC")
 
-plt.plot(X1,Y1, c="blue")
-#plt.plot(X2,Y2, c="orange")
-plt.show()
-quit()
+# plt.plot(X1,Y1, c="blue")
+# plt.plot(X2,Y2, c="orange")
+# plt.show()
+# quit()
 
 
 #interpolation
 X,Y1,Y2 = normalize.FillMissingValues(X1,Y1,X2,Y2)
 
 #[-1,1]
-X = normalize.NormalizeVec(X)
-Y1 = normalize.NormalizeVec(Y1)
-Y2 = normalize.NormalizeVec(Y2)
+nrmX = normalize.Normalizer(X)
+nrmY1 = normalize.Normalizer(Y1)
+nrmY2 = normalize.Normalizer(Y2)
+X = nrmX(X)
+Y1 = nrmY1(Y1)
+Y2 = nrmY2(Y2)
 
 #Linear prediction
 #create table for learning
@@ -101,14 +104,18 @@ x = dataRidge.AddOnes(x)
 w = LeastSquares.Solve(x,y)
 errs = ConfidenceInterval.GetErrorDistribution(x,y)
 
-yPred = []
-for i in range(y.size):
-    yPred.append(np.dot(w,x[i,:]))
-yPredUp = yPred[:-1] + MakePredictions(x[-1,:],needPreds,w,np.max(errs))
-yPredLow = yPred[:-1] + MakePredictions(x[-1,:],needPreds,w,np.min(errs))
-yPred05 = yPred[:-1] + MakePredictions(x[-1,:],needPreds,w,np.percentile(errs,10))
-yPred95 = yPred[:-1] + MakePredictions(x[-1,:],needPreds,w,np.percentile(errs,90))
-yPredMean = yPred[:-1] + MakePredictions(x[-1,:],needPreds,w)
+# yPred = []
+# for i in range(y.size):
+    # yPred.append(np.dot(w,x[i,:]))
+# yPredUp = yPred[:-1] + MakePredictions(x[-1,:],needPreds,w,np.max(errs))
+# yPredLow = yPred[:-1] + MakePredictions(x[-1,:],needPreds,w,np.min(errs))
+# yPred05 = yPred[:-1] + MakePredictions(x[-1,:],needPreds,w,np.percentile(errs,10))
+# yPred95 = yPred[:-1] + MakePredictions(x[-1,:],needPreds,w,np.percentile(errs,90))
+# yPredMean = yPred[:-1] + MakePredictions(x[-1,:],needPreds,w)
+_, yPredMean = dataRidge.DataBuilder().Build("SalesApred")
+yPredMean = nrmY1(yPredMean)
+# print(yPredMean)
+# quit()
 
 A,B = TimeSeriesHelper.TableOneFromAnother(Y1,Y2,k)
 A = dataRidge.AddOnes(A)
@@ -120,8 +127,8 @@ errs2 = ConfidenceInterval.GetErrorDistribution(A,B)
 
 plt.subplot(2, 1, 1)
 wDist = ConfidenceInterval.GetDistribution(x,y)
-PlottingHelper.AddLegends(['royalblue','orange','green'],['First Series Error Density',
-    'Second Series Error Density'])
+PlottingHelper.AddLegends(['royalblue','orange'],[
+    'First Series Error Density', 'Second Series Error Density'])
 PlottingHelper.DensityPlot(errs,c='royalblue')
 PlottingHelper.DensityPlot(errs2,c='orange')
 # plt.show()
@@ -138,10 +145,10 @@ PlottingHelper.AddLegends(['r','g','orange','violet','royalblue'],[
     'Mean',
     'Points'])
 plt.scatter(np.arange(y.size),y,linewidth=2.0,c='royalblue')
-plt.plot(np.arange(len(yPredMean)),yPredUp,c='r')
-plt.plot(np.arange(len(yPredMean)),yPredLow,c='r')
-plt.plot(np.arange(len(yPredMean)),yPred05,c='g')
-plt.plot(np.arange(len(yPredMean)),yPred95,c='g')
+# plt.plot(np.arange(len(yPredMean)),yPredUp,c='r')
+# plt.plot(np.arange(len(yPredMean)),yPredLow,c='r')
+# plt.plot(np.arange(len(yPredMean)),yPred05,c='g')
+# plt.plot(np.arange(len(yPredMean)),yPred95,c='g')
 plt.plot(np.arange(len(yPredMean)),yPredMean+np.percentile(errs,10),c='orange')
 plt.plot(np.arange(len(yPredMean)),yPredMean+np.percentile(errs,90),c='orange')
 plt.plot(np.arange(len(yPredMean)),yPredMean,c='violet')
