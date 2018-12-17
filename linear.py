@@ -77,13 +77,18 @@ needPreds = 50
 # X2, Y2 = dataRidge.DataBuilder().Build("SalesB")
 
 # X1, Y1 = dataRidge.DataBuilder().Build("RowApred")
-X1, Y1 = dataRidge.DataBuilder().Build("RowB")
-X2, Y2 = dataRidge.DataBuilder().Build("RowC")
+# X1, Y1 = dataRidge.DataBuilder().Build("RowB")
+# X2, Y2 = dataRidge.DataBuilder().Build("RowC")
 
-# plt.plot(X1,Y1, c="blue")
-# plt.plot(X2,Y2, c="orange")
-# plt.show()
-# quit()
+X1, Y1 = dataRidge.DataBuilder().Build("SalesWaltmartApred")
+X1, Y1 = dataRidge.DataBuilder().Build("SalesWaltmartA")
+X2, Y2 = dataRidge.DataBuilder().Build("SalesWaltmartB")
+
+plt.plot(X1,Y1, c="blue")
+plt.plot(X2,Y2, c="orange")
+plt.show()
+
+quit()
 
 
 #interpolation
