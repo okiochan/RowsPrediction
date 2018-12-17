@@ -169,6 +169,46 @@ class SalesB:
                 Y.append(df.values[i][3])
         X = np.arange(0,len(Y))
         return X,Y
+        
+            
+class SalesWaltmartA:
+    def GenerateSample(self):
+        df=pd.read_csv('sales1.csv', sep=',',header=None) 
+        Y = list() 
+        for i in range(len(df.values)): 
+            if (df.values[i][0] == 11): 
+                Y.append(df.values[i][3])
+        X = np.arange(0,len(Y))
+        return X,Y
+        
+        
+            
+class SalesWaltmartApred:
+    def GenerateSample(self):
+        df=pd.read_csv('sales1.csv', sep=',',header=None) 
+        Y = list() 
+        for i in range(len(df.values)): 
+            if (df.values[i][0] == 11): 
+                Y.append(df.values[i][3])
+        Y1 = [44604.68366780408, 44284.23245159894, 34920.733854985454, 66227.4037643192, 47775.917015379, 23796.00450466722, 26037.989897397754, 32674.88708456061, 42150.42929911338, 57776.53610057287, 139021.2112169119, 96852.55382806949, -2632.293717278397, -6861.533534091115, 6313.426275281679, 21741.72323473379, 23508.579102244374, 19507.91556055616, 18415.81249526437, 17972.180708126944, 17419.07671139374, 19159.063677666705, 18661.491072311026, 18594.7322316765, 16986.402656859602, 17312.513520569875, 17468.576777262017, 19297.115748116747, 19434.054800482165, 20395.72555215999]
+
+        Y = np.concatenate( (Y,Y1), axis=0)
+        
+        X = np.arange(0,len(Y))
+        return X,Y
+ 
+        
+            
+class SalesWaltmartB:
+    def GenerateSample(self):
+        df=pd.read_csv('sales1.csv', sep=',',header=None) 
+        Y = list() 
+        for i in range(len(df.values)): 
+            if (df.values[i][0] != 11): 
+                Y.append(df.values[i][3])
+        X = np.arange(0,len(Y))
+        return X,Y
+
 
 def GetQuadraticTrend(a,b,c,x,noise=0.1):
     return a*x**2+b*x+c + np.random.randn(x.size)*noise
@@ -204,6 +244,16 @@ class DataBuilder:
             return x, y
         elif name == "SalesB":
             x, y = SalesB().GenerateSample()
+            return x, y
+            
+        elif name == "SalesWaltmartA":
+            x, y = SalesWaltmartA().GenerateSample()
+            return x, y
+        elif name == "SalesWaltmartB":
+            x, y = SalesWaltmartB().GenerateSample()
+            return x, y
+        elif name == "SalesWaltmartApred":
+            x, y = SalesWaltmartApred().GenerateSample()
             return x, y
             
             
