@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import dataRidge
 import normalize
 
+# some change
 
 #ideal: k=2, Sin, Cos
 k = 3
